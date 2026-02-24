@@ -6,10 +6,10 @@ import './App.css'
 
 const INITIAL_AREAS = [
   {
-    id: 'recepcion',
-    nombre: 'Recepción',
+    id: 'sistemas',
+    nombre: 'Sistemas',
     descripcion: 'Punto de entrada principal y orientación al paciente.',
-    pano: '/panos/recepcion.webp',
+    pano: '/panos/sistemas.webp',
     hotspots: [
       { id: 'pasillo', nombre: 'Ir a Pasillo', yaw: -16.7, pitch: -24.1, radius: 8 },
     ],
@@ -20,7 +20,7 @@ const INITIAL_AREAS = [
     descripcion: 'Conexión principal entre áreas del hospital.',
     pano: '/panos/pasillo.webp',
     hotspots: [
-      { id: 'recepcion', nombre: 'Volver a Recepción', yaw: 162.6, pitch: -25.1, radius: 8 },
+      { id: 'sistemas', nombre: 'Volver a Sistemas', yaw: 162.6, pitch: -25.1, radius: 8 },
       { id: 'entrada', nombre: 'Ir a Entrada', yaw: -102.9, pitch: -20.1, radius: 8 }
     ],
   },
@@ -171,7 +171,7 @@ function Panorama360({ area, onPanoErrorChange, onMoveToArea, editMode, onPlaceH
 
 function App() {
   const [areas, setAreas] = useState(INITIAL_AREAS)
-  const [areaActiva, setAreaActiva] = useState('recepcion')
+  const [areaActiva, setAreaActiva] = useState('sistemas')
   const [panoConError, setPanoConError] = useState(false)
   const [modoColocar, setModoColocar] = useState(false)
   const [destinoHotspot, setDestinoHotspot] = useState('pasillo')
@@ -332,7 +332,7 @@ function App() {
       <aside className="panel">
         <h1>Recorrido Virtual Hospital</h1>
         <p>
-          Haz clic en los puntos dentro de la panorámica para avanzar entre Recepción y Pasillo.
+          Haz clic en los puntos dentro de la panorámica para avanzar entre Sistemas y Pasillo.
         </p>
 
         <div className="areas">
