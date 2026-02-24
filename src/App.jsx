@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
-import { Canvas, useFrame } from '@react-three/fiber'
+import { Canvas, useLoader } from '@react-three/fiber'
 import { Html, OrbitControls } from '@react-three/drei'
-import { BackSide, DoubleSide, SRGBColorSpace, TextureLoader, Vector3 } from 'three'
+import { BackSide, DoubleSide, RepeatWrapping, SRGBColorSpace, TextureLoader, Vector3 } from 'three'
 import './App.css'
 
 const INITIAL_AREAS = [
@@ -9,26 +9,26 @@ const INITIAL_AREAS = [
     id: 'recepcion',
     nombre: 'Recepción',
     descripcion: 'Punto de entrada principal y orientación al paciente.',
-    pano: '/panos/recepcion.jpeg',
+    pano: '/panos/recepcion.webp',
     hotspots: [
-      { id: 'pasillo', nombre: 'Ir a Pasillo', yaw: -162.7, pitch: -23.8, radius: 8 },
+      { id: 'pasillo', nombre: 'Ir a Pasillo', yaw: -16.7, pitch: -24.1, radius: 8 },
     ],
   },
   {
     id: 'pasillo',
     nombre: 'Pasillo',
     descripcion: 'Conexión principal entre áreas del hospital.',
-    pano: '/panos/pasillo.jpeg',
+    pano: '/panos/pasillo.webp',
     hotspots: [
-      { id: 'recepcion', nombre: 'Volver a Recepción', yaw: 15.3, pitch: -27.5, radius: 8 },
-      { id: 'entrada', nombre: 'Ir a Entrada', yaw: -78.9, pitch: -17, radius: 8.5 }
+      { id: 'recepcion', nombre: 'Volver a Recepción', yaw: 162.6, pitch: -25.1, radius: 8 },
+      { id: 'entrada', nombre: 'Ir a Entrada', yaw: -102.9, pitch: -20.1, radius: 8 }
     ],
   },
   {
     id: 'entrada',
     nombre: 'Entrada',
     descripcion: 'Acceso principal al hospital.',
-    pano: '/panos/entrada.jpeg',
+    pano: '/panos/entrada.webp',
     rotacionYaw: 180,
     hotspots: [
       { id: 'pasillo', nombre: 'Ir a Pasillo', yaw: -91.2, pitch: -19.4, radius: 8 },
@@ -113,126 +113,20 @@ function Hotspot({ nombre, yaw, pitch, radius, onClick }) {
 }
 
 function Panorama360({ area, onPanoErrorChange, onMoveToArea, editMode, onPlaceHotspot }) {
-  const [baseTexture, setBaseTexture] = useState(null)
-  const [incomingTexture, setIncomingTexture] = useState(null)
-  const [blend, setBlend] = useState(1)
-  const baseTextureRef = useRef(null)
-  const incomingTextureRef = useRef(null)
-  const textureLoaderRef = useRef(new TextureLoader())
-  const textureCacheRef = useRef(new Map())
+  const texture = useLoader(TextureLoader, area.pano)
   const rotacionYawGrados = area?.rotacionYaw ?? 0
   const rotacionYawRadianes = (rotacionYawGrados * Math.PI) / 180
 
   useEffect(() => {
-    baseTextureRef.current = baseTexture
-  }, [baseTexture])
-
-  useEffect(() => {
-    incomingTextureRef.current = incomingTexture
-  }, [incomingTexture])
-
-  useEffect(() => () => {
-    const texturas = new Set(textureCacheRef.current.values())
-    texturas.forEach((texture) => texture.dispose())
-    textureCacheRef.current.clear()
-  }, [])
-
-  useEffect(() => {
-    let isDisposed = false
-    let retryTimeoutId
-
+    texture.colorSpace = SRGBColorSpace
+    texture.flipY = true
+    texture.wrapS = RepeatWrapping
+    texture.repeat.x = -1
+    texture.offset.x = 1
+    texture.generateMipmaps = true
+    texture.needsUpdate = true
     onPanoErrorChange(false)
-
-    if (!area?.pano) {
-      onPanoErrorChange(true)
-      return undefined
-    }
-
-    const basePath = area.pano
-    const extensiones = ['.jpg', '.jpeg', '.png', '.webp']
-    const matchExtension = basePath.match(/\.[a-zA-Z0-9]+$/)
-    const posiblesRutas = matchExtension
-      ? [basePath]
-      : extensiones.map((ext) => `${basePath}${ext}`)
-
-    const intentarCarga = (index, intento = 0) => {
-      if (index >= posiblesRutas.length) {
-        if (!isDisposed) onPanoErrorChange(true)
-        return
-      }
-
-      const rutaActual = posiblesRutas[index]
-      const texturaEnCache = textureCacheRef.current.get(rutaActual)
-
-      if (texturaEnCache) {
-        onPanoErrorChange(false)
-        if (baseTextureRef.current && baseTextureRef.current !== texturaEnCache) {
-          setIncomingTexture(texturaEnCache)
-          setBlend(0)
-        } else {
-          setBaseTexture(texturaEnCache)
-          setBlend(1)
-        }
-        return
-      }
-
-      const maxIntentosPorRuta = 3
-
-      const onLoad = (nextTexture) => {
-        if (isDisposed) return
-
-        nextTexture.colorSpace = SRGBColorSpace
-        nextTexture.needsUpdate = true
-        textureCacheRef.current.set(rutaActual, nextTexture)
-        onPanoErrorChange(false)
-
-        if (baseTextureRef.current && baseTextureRef.current !== nextTexture) {
-          setIncomingTexture(nextTexture)
-          setBlend(0)
-        } else {
-          setBaseTexture(nextTexture)
-          setBlend(1)
-        }
-      }
-
-      const onError = () => {
-        if (isDisposed) return
-
-        if (intento + 1 < maxIntentosPorRuta) {
-          retryTimeoutId = window.setTimeout(() => {
-            intentarCarga(index, intento + 1)
-          }, 200)
-          return
-        }
-
-        intentarCarga(index + 1, 0)
-      }
-
-      textureLoaderRef.current.load(rutaActual, onLoad, undefined, onError)
-    }
-
-    intentarCarga(0)
-
-    return () => {
-      isDisposed = true
-      if (retryTimeoutId) {
-        window.clearTimeout(retryTimeoutId)
-      }
-    }
-  }, [area?.pano, onPanoErrorChange])
-
-  useFrame((_, delta) => {
-    if (!incomingTextureRef.current || blend >= 1) return
-
-    const nextBlend = Math.min(1, blend + delta * 2.4)
-    setBlend(nextBlend)
-
-    if (nextBlend >= 1) {
-      const textureToPromote = incomingTextureRef.current
-      setIncomingTexture(null)
-      setBaseTexture(textureToPromote)
-    }
-  })
+  }, [texture, onPanoErrorChange])
 
   return (
     <>
@@ -251,30 +145,13 @@ function Panorama360({ area, onPanoErrorChange, onMoveToArea, editMode, onPlaceH
         >
           <sphereGeometry args={[60, 64, 64]} />
           <meshBasicMaterial
-            map={baseTexture ?? null}
-            color={baseTexture ? '#ffffff' : '#cbd5e1'}
+            map={texture}
+            color="#ffffff"
             side={BackSide}
             toneMapped={false}
-            transparent={Boolean(incomingTexture)}
-            opacity={incomingTexture ? 1 - blend : 1}
             depthWrite={false}
           />
         </mesh>
-
-        {incomingTexture ? (
-          <mesh position={[0, 1.6, 0]}>
-            <sphereGeometry args={[59.8, 64, 64]} />
-            <meshBasicMaterial
-              map={incomingTexture}
-              color="#ffffff"
-              side={BackSide}
-              toneMapped={false}
-              transparent
-              opacity={blend}
-              depthWrite={false}
-            />
-          </mesh>
-        ) : null}
 
         {(area.hotspots ?? []).map((hotspot) => (
           <Hotspot
@@ -286,6 +163,7 @@ function Panorama360({ area, onPanoErrorChange, onMoveToArea, editMode, onPlaceH
             onClick={() => onMoveToArea(hotspot.id)}
           />
         ))}
+
       </group>
     </>
   )
@@ -303,6 +181,14 @@ function App() {
 
   const areaSeleccionada = areas.find((item) => item.id === areaActiva)
   const destinosDisponibles = areas.filter((item) => item.id !== areaActiva)
+
+  useEffect(() => {
+    areas.forEach((area) => {
+      const image = new Image()
+      image.decoding = 'async'
+      image.src = area.pano
+    })
+  }, [areas])
 
   useEffect(() => {
     let cancelado = false
