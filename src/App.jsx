@@ -178,15 +178,34 @@ function App() {
   const [radioHotspot, setRadioHotspot] = useState(18)
   const [ultimoPunto, setUltimoPunto] = useState(null)
   const controlsRef = useRef(null)
+  const textureLoaderRef = useRef(new TextureLoader())
+  const preloadPromisesRef = useRef(new Map())
 
   const areaSeleccionada = areas.find((item) => item.id === areaActiva)
   const destinosDisponibles = areas.filter((item) => item.id !== areaActiva)
 
+  const precargarPanorama = (ruta) => {
+    if (!ruta) return Promise.resolve()
+
+    const cache = preloadPromisesRef.current
+    if (cache.has(ruta)) return cache.get(ruta)
+
+    const promise = new Promise((resolve) => {
+      textureLoaderRef.current.load(
+        ruta,
+        () => resolve(true),
+        undefined,
+        () => resolve(false),
+      )
+    })
+
+    cache.set(ruta, promise)
+    return promise
+  }
+
   useEffect(() => {
     areas.forEach((area) => {
-      const image = new Image()
-      image.decoding = 'async'
-      image.src = area.pano
+      void precargarPanorama(area.pano)
     })
   }, [areas])
 
@@ -233,9 +252,11 @@ function App() {
     if (!existe) setDestinoHotspot(destinosDisponibles[0].id)
   }, [areaActiva, destinoHotspot, destinosDisponibles])
 
-  const moverAArea = (idDestino) => {
+  const moverAArea = async (idDestino) => {
     const destino = areas.find((item) => item.id === idDestino)
     if (!destino) return
+
+    await precargarPanorama(destino.pano)
     setAreaActiva(destino.id)
   }
 
