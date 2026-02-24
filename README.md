@@ -28,6 +28,15 @@ Extensiones soportadas automáticamente: `.jpg`, `.jpeg`, `.png`, `.webp`.
 
 Formato recomendado: equirectangular 2:1 (por ejemplo 4096x2048).
 
+## Manifest escalable (fase 1)
+
+La app ahora intenta cargar áreas desde [public/hospital-manifest.json](public/hospital-manifest.json).
+
+- Si el manifest es válido, se usa esa configuración.
+- Si falla la carga o el JSON no es válido, la app usa el fallback local (`INITIAL_AREAS`) y no se rompe.
+
+Esto permite migrar progresivamente a backend/CDN sin interrumpir el visor actual.
+
 ## Ejecutar
 
 ```bash

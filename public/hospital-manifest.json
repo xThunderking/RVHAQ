@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "hospitalId": "rvhaq-demo",
+  "areas": [
+    {
+      "id": "recepcion",
+      "nombre": "Recepción",
+      "descripcion": "Punto de entrada principal y orientación al paciente.",
+      "pano": "/panos/recepcion.jpeg",
+      "hotspots": [
+        { "id": "pasillo", "nombre": "Ir a Pasillo", "yaw": -162.7, "pitch": -23.8, "radius": 8 }
+      ]
+    },
+    {
+      "id": "pasillo",
+      "nombre": "Pasillo",
+      "descripcion": "Conexión principal entre áreas del hospital.",
+      "pano": "/panos/pasillo.jpeg",
+      "hotspots": [
+        { "id": "recepcion", "nombre": "Volver a Recepción", "yaw": 15.3, "pitch": -27.5, "radius": 8 },
+        { "id": "entrada", "nombre": "Ir a Entrada", "yaw": -78.9, "pitch": -17, "radius": 8.5 }
+      ]
+    },
+    {
+      "id": "entrada",
+      "nombre": "Entrada",
+      "descripcion": "Acceso principal al hospital.",
+      "pano": "/panos/entrada.jpeg",
+      "rotacionYaw": 180,
+      "hotspots": [
+        { "id": "pasillo", "nombre": "Ir a Pasillo", "yaw": -91.2, "pitch": -19.4, "radius": 8 }
+      ]
+    }
+  ]
+}
