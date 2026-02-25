@@ -9,6 +9,8 @@ function esManifestValido(areas) {
     && typeof area.id === 'string'
     && typeof area.nombre === 'string'
     && typeof area.pano === 'string'
+    && (area.previewUrl === undefined || typeof area.previewUrl === 'string')
+    && (area.marzipanoUrl === undefined || typeof area.marzipanoUrl === 'string')
   ))
 }
 
@@ -32,5 +34,7 @@ export async function fetchScenesFromManifest() {
     nombre: area.nombre,
     descripcion: area.descripcion ?? 'Escena 360 del área.',
     pano: area.pano,
+    previewUrl: area.previewUrl,
+    marzipanoUrl: area.marzipanoUrl,
   }))
 }

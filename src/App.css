@@ -4,15 +4,15 @@
   height: 100dvh;
   min-height: 100dvh;
   width: 100%;
-  background: linear-gradient(180deg, #eff6ff 0%, #e0e7ff 100%);
+  background: linear-gradient(180deg, #eaf3ff 0%, #dbeafe 100%);
   overflow: hidden;
 }
 
 .selector-screen {
   min-height: 100dvh;
-  background: radial-gradient(circle at 15% 20%, #dbeafe 0%, transparent 35%),
-    radial-gradient(circle at 85% 10%, #e9d5ff 0%, transparent 40%),
-    #eef2ff;
+  background: radial-gradient(circle at 12% 18%, rgba(30, 64, 175, 0.16) 0%, transparent 35%),
+    radial-gradient(circle at 88% 8%, rgba(14, 116, 144, 0.14) 0%, transparent 34%),
+    #eaf3ff;
   display: grid;
   place-items: center;
   padding: 1.2rem;
@@ -21,13 +21,18 @@
 .selector-card {
   width: min(980px, 100%);
   background: rgba(255, 255, 255, 0.9);
-  border: 1px solid #dbeafe;
+  border: 1px solid #bfdbfe;
   border-radius: 18px;
   padding: 1.1rem;
   display: grid;
   gap: 1rem;
-  box-shadow: 0 18px 50px rgba(15, 23, 42, 0.12);
+  box-shadow: 0 16px 40px rgba(30, 64, 175, 0.16);
   backdrop-filter: blur(6px);
+}
+
+.selector-card {
+  text-align: center;
+  align-items: center;
 }
 
 .selector-head {
@@ -35,9 +40,30 @@
   gap: 0.4rem;
 }
 
+.selector-head {
+  justify-items: center;
+  text-align: center;
+}
+
+.brand-logo {
+  width: 100%;
+  max-width: 210px;
+  height: auto;
+  object-fit: contain;
+  border-radius: 10px;
+  border: 1px solid #dbeafe;
+  background: #ffffff;
+  padding: 0.2rem;
+}
+
+.brand-logo {
+  margin: 0 auto;
+  display: block;
+}
+
 .selector-kicker {
   margin: 0;
-  color: #1d4ed8;
+  color: #1e40af;
   font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0.06em;
@@ -47,7 +73,7 @@
 .selector-card h1 {
   margin: 0;
   color: #0f172a;
-  font-size: 1.45rem;
+  font-size: 2rem;
 }
 
 .selector-card p {
@@ -62,11 +88,11 @@
 }
 
 .selector-item {
-  border: 1px solid #bfdbfe;
+  border: 1px solid #c7ddff;
   border-radius: 14px;
-  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+  background: linear-gradient(180deg, #ffffff 0%, #f1f7ff 100%);
   padding: 0.58rem;
-  text-align: left;
+  text-align: center;
   color: #0f172a;
   font-weight: 700;
   cursor: pointer;
@@ -75,10 +101,15 @@
   transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
 }
 
+.selector-item {
+  align-items: center;
+  justify-items: center;
+}
+
 .selector-item:hover {
   transform: translateY(-2px);
   border-color: #60a5fa;
-  box-shadow: 0 10px 24px rgba(37, 99, 235, 0.16);
+  box-shadow: 0 12px 24px rgba(30, 64, 175, 0.18);
 }
 
 .selector-thumb {
@@ -105,13 +136,20 @@
 .viewport {
   position: relative;
   min-height: 0;
-  border-right: 1px solid #dbeafe;
+  border-right: 1px solid #bfdbfe;
+}
+
+.marzipano-frame {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: #000;
 }
 
 .panel {
   padding: 1rem;
-  background: rgba(255, 255, 255, 0.92);
-  border-left: 1px solid #dbeafe;
+  background: rgba(248, 252, 255, 0.95);
+  border-left: 1px solid #bfdbfe;
   display: flex;
   flex-direction: column;
   gap: 0.82rem;
@@ -119,15 +157,41 @@
   overflow-y: auto;
 }
 
+.panel {
+  text-align: center;
+  align-items: center;
+}
+
 .panel-head {
   display: grid;
   gap: 0.34rem;
 }
 
+.panel-head {
+  justify-items: center;
+}
+
+.panel-logo {
+  max-width: 180px;
+}
+
+.panel-kicker {
+  margin: 0;
+  color: #1d4ed8 !important;
+  font-size: 0.75rem !important;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
 .panel h1 {
   margin: 0;
   font-size: 1.28rem;
-  color: #0f172a;
+  color: #0b1f44;
+}
+
+.panel h1 {
+  text-align: center;
 }
 
 .panel p {
@@ -139,14 +203,17 @@
 .areas {
   display: grid;
   gap: 0.46rem;
+  max-height: 34dvh;
+  overflow-y: auto;
+  padding-right: 0.15rem;
 }
 
 .area-btn {
   border: 1px solid #bfdbfe;
   border-radius: 10px;
-  min-height: 40px;
+  min-height: 42px;
   padding: 0.6rem 0.75rem;
-  text-align: left;
+  text-align: center;
   font-size: 0.92rem;
   color: #1e293b;
   background: #f8fafc;
@@ -154,33 +221,33 @@
 }
 
 .area-btn.active {
-  background: linear-gradient(180deg, #dbeafe 0%, #bfdbfe 100%);
-  border-color: #3b82f6;
-  color: #1d4ed8;
+  background: linear-gradient(180deg, #dbeafe 0%, #93c5fd 100%);
+  border-color: #2563eb;
+  color: #1e3a8a;
   font-weight: 600;
 }
 
 .menu-back-btn {
   width: 100%;
-  min-height: 40px;
+  min-height: 42px;
   border-radius: 10px;
   border: 1px solid #bfdbfe;
-  background: #ffffff;
-  color: #1d4ed8;
+  background: linear-gradient(180deg, #ffffff 0%, #eef6ff 100%);
+  color: #1e40af;
   font-weight: 600;
   cursor: pointer;
   transition: background 0.2s ease, border-color 0.2s ease;
 }
 
 .menu-back-btn:hover {
-  background: #eff6ff;
-  border-color: #60a5fa;
+  background: #e0eeff;
+  border-color: #3b82f6;
 }
 
 .detalle {
   margin-top: 0.1rem;
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
+  background: linear-gradient(180deg, #f8fbff 0%, #eef6ff 100%);
+  border: 1px solid #dbeafe;
   border-radius: 12px;
   padding: 0.8rem;
 }
@@ -188,11 +255,13 @@
 .detalle h2 {
   margin: 0 0 0.45rem;
   font-size: 1.02rem;
-  color: #0f172a;
+  color: #1e3a8a;
 }
 
 .detalle p {
   margin: 0;
+  color: #334155;
+  line-height: 1.45;
 }
 
 .hotspot-label {
@@ -226,37 +295,46 @@
 
   .app {
     grid-template-columns: 1fr;
-    grid-template-rows: minmax(48dvh, 60dvh) minmax(40dvh, auto);
+    grid-template-rows: minmax(52dvh, 62dvh) minmax(38dvh, auto);
     overflow: auto;
   }
 
   .viewport {
-    min-height: 48dvh;
+    min-height: 52dvh;
     border-right: none;
   }
 
   .panel {
     border-left: none;
-    border-top: 1px solid #dbeafe;
+    border-top: 1px solid #bfdbfe;
     padding: 0.85rem;
     gap: 0.7rem;
     overflow-y: auto;
+  }
+
+  .areas {
+    max-height: none;
+    overflow-y: visible;
   }
 }
 
 @media (max-width: 640px) {
   .selector-screen {
-    padding: 0.72rem;
+    padding: 0.58rem;
   }
 
   .selector-card {
     border-radius: 14px;
-    padding: 0.75rem;
-    gap: 0.72rem;
+    padding: 0.72rem;
+    gap: 0.66rem;
   }
 
   .selector-card h1 {
-    font-size: 1.18rem;
+    font-size: 1.6rem;
+  }
+
+  .brand-logo {
+    max-width: 172px;
   }
 
   .selector-grid {
@@ -272,14 +350,35 @@
   }
 
   .panel h1 {
-    font-size: 1.15rem;
+    font-size: 1.2rem;
   }
 
   .panel p {
-    font-size: 0.9rem;
+    font-size: 0.86rem;
   }
 
   .detalle {
-    padding: 0.62rem;
+    padding: 0.56rem;
+  }
+
+  .menu-back-btn,
+  .area-btn {
+    min-height: 40px;
+    font-size: 0.88rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .selector-card h1 {
+    font-size: 1.3rem;
+  }
+
+  .brand-logo {
+    max-width: 150px;
+  }
+
+  .selector-kicker,
+  .panel-kicker {
+    font-size: 0.68rem !important;
   }
 }

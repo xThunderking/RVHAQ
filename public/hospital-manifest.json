@@ -7,6 +7,8 @@
       "nombre": "Sistemas",
       "descripcion": "Punto de entrada principal y orientación al paciente.",
       "pano": "/panos/sistemas.jpeg",
+      "previewUrl": "https://hospital360-panos.s3.amazonaws.com/sistemas/sistemas.jpeg",
+      "marzipanoUrl": "https://hospital360-panos.s3.amazonaws.com/sistemas/app-files/index.html",
       "hotspots": [
         { "id": "pasillo", "nombre": "Ir a Pasillo", "yaw": -16.7, "pitch": -24.1, "radius": 8 }
       ]
@@ -16,6 +18,8 @@
       "nombre": "Pasillo",
       "descripcion": "Conexión principal entre áreas del hospital.",
       "pano": "/panos/pasillo.jpeg",
+      "previewUrl": "https://hospital360-panos.s3.amazonaws.com/pasillo/pasillo.jpeg",
+      "marzipanoUrl": "https://hospital360-panos.s3.amazonaws.com/pasillo/app-files/index.html",
       "hotspots": [
         { "id": "sistemas", "nombre": "Volver a Sistemas", "yaw": 162.6, "pitch": -25.1, "radius": 8 },
         { "id": "entrada", "nombre": "Ir a Entrada", "yaw": -102.9, "pitch": -20.1, "radius": 8 }
@@ -26,6 +30,8 @@
       "nombre": "Entrada",
       "descripcion": "Acceso principal al hospital.",
       "pano": "/panos/entrada.jpeg",
+      "previewUrl": "https://hospital360-panos.s3.amazonaws.com/entrada/entrada.jpeg",
+      "marzipanoUrl": "https://hospital360-panos.s3.amazonaws.com/entrada/app-files/index.html",
       "rotacionYaw": 180,
       "hotspots": [
         { "id": "pasillo", "nombre": "Ir a Pasillo", "yaw": -91.2, "pitch": -19.4, "radius": 8 }

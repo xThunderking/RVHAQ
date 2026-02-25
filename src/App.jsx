@@ -6,24 +6,32 @@ import { fetchScenesFromManifest } from './services/scenesService'
 import { useViewerStore } from './store/viewerStore'
 import './App.css'
 
+const LOGO_URL = 'https://hospital360-panos.s3.amazonaws.com/rvhaq/logohaq.jpg'
+
 const INITIAL_SCENES = [
   {
     id: 'sistemas',
     nombre: 'Sistemas',
     descripcion: 'Área de sistemas del hospital.',
     pano: '/panos/sistemas.jpeg',
+    previewUrl: 'https://hospital360-panos.s3.amazonaws.com/sistemas/sistemas.jpeg',
+    marzipanoUrl: 'https://hospital360-panos.s3.amazonaws.com/sistemas/app-files/index.html',
   },
   {
     id: 'pasillo',
     nombre: 'Pasillo',
     descripcion: 'Conexión principal entre áreas.',
     pano: '/panos/pasillo.jpeg',
+    previewUrl: 'https://hospital360-panos.s3.amazonaws.com/pasillo/pasillo.jpeg',
+    marzipanoUrl: 'https://hospital360-panos.s3.amazonaws.com/pasillo/app-files/index.html',
   },
   {
     id: 'entrada',
     nombre: 'Entrada',
     descripcion: 'Acceso principal del hospital.',
     pano: '/panos/entrada.jpeg',
+    previewUrl: 'https://hospital360-panos.s3.amazonaws.com/entrada/entrada.jpeg',
+    marzipanoUrl: 'https://hospital360-panos.s3.amazonaws.com/entrada/app-files/index.html',
   },
 ]
 
@@ -110,9 +118,15 @@ export default function App() {
       <main className="selector-screen">
         <section className="selector-card">
           <header className="selector-head">
-            <p className="selector-kicker">Recorrido por áreas</p>
+            <img
+              className="brand-logo"
+              src={LOGO_URL}
+              alt="Logo Hospital Ángeles Querétaro"
+              loading="lazy"
+            />
+            <p className="selector-kicker">Hospital Ángeles Querétaro</p>
             <h1>Selecciona un área</h1>
-            <p>Elige una de las áreas disponibles para ver su imagen 360.</p>
+            <p>Explora escenas 360 por área clínica desde una interfaz rápida, limpia y adaptada a cualquier dispositivo.</p>
           </header>
 
           <div className="selector-grid">
@@ -125,7 +139,7 @@ export default function App() {
               >
                 <img
                   className="selector-thumb"
-                  src={scene.pano}
+                  src={scene.previewUrl ?? scene.pano}
                   alt={`Vista previa de ${scene.nombre}`}
                 />
                 <span className="selector-name">{scene.nombre}</span>
@@ -141,24 +155,41 @@ export default function App() {
   return (
     <main className="app">
       <section className="viewport">
-        <Canvas camera={{ position: [0, 1.6, 0.1], fov: 75 }}>
-          <color attach="background" args={['#eff6ff']} />
-          {activeScene ? <Scene360 scene={activeScene} /> : null}
-          <OrbitControls
-            makeDefault
-            target={[0, 1.6, 0]}
-            enablePan={false}
-            enableZoom={false}
-            minDistance={0.1}
-            maxDistance={0.1}
+        {activeScene?.marzipanoUrl ? (
+          <iframe
+            className="marzipano-frame"
+            src={activeScene.marzipanoUrl}
+            title={`Visor Marzipano ${activeScene.nombre}`}
+            loading="lazy"
+            allow="fullscreen"
           />
-        </Canvas>
+        ) : (
+          <Canvas camera={{ position: [0, 1.6, 0.1], fov: 75 }}>
+            <color attach="background" args={['#eff6ff']} />
+            {activeScene ? <Scene360 scene={activeScene} /> : null}
+            <OrbitControls
+              makeDefault
+              target={[0, 1.6, 0]}
+              enablePan={false}
+              enableZoom={false}
+              minDistance={0.1}
+              maxDistance={0.1}
+            />
+          </Canvas>
+        )}
       </section>
 
       <aside className="panel">
         <div className="panel-head">
-          <h1>Escenas por Áreas</h1>
-          <p>Selecciona un área para visualizar su escena 360.</p>
+          <img
+            className="brand-logo panel-logo"
+            src={LOGO_URL}
+            alt="Logo Hospital Ángeles Querétaro"
+            loading="lazy"
+          />
+          <p className="panel-kicker">Hospital Ángeles Querétaro</p>
+          <h1>Visor de Escenas 360</h1>
+          <p>Selecciona un área para visualizar su entorno clínico en 360°.</p>
         </div>
         <button
           type="button"
