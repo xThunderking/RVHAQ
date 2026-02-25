@@ -1,7 +1,9 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo } from 'react'
 import { Canvas, useLoader } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
 import { BackSide, RepeatWrapping, SRGBColorSpace, TextureLoader } from 'three'
+import { fetchScenesFromManifest } from './services/scenesService'
+import { useViewerStore } from './store/viewerStore'
 import './App.css'
 
 const INITIAL_SCENES = [
@@ -24,18 +26,6 @@ const INITIAL_SCENES = [
     pano: '/panos/entrada.jpeg',
   },
 ]
-
-function esManifestValido(areas) {
-  if (!Array.isArray(areas) || areas.length === 0) return false
-
-  return areas.every((area) => (
-    area
-    && typeof area === 'object'
-    && typeof area.id === 'string'
-    && typeof area.nombre === 'string'
-    && typeof area.pano === 'string'
-  ))
-}
 
 function Scene360({ scene }) {
   const texture = useLoader(TextureLoader, scene.pano)
@@ -65,9 +55,18 @@ function Scene360({ scene }) {
 }
 
 export default function App() {
-  const [scenes, setScenes] = useState(INITIAL_SCENES)
-  const [activeSceneId, setActiveSceneId] = useState(null)
-  const [sceneSeleccionada, setSceneSeleccionada] = useState(false)
+  const scenes = useViewerStore((state) => state.scenes)
+  const activeSceneId = useViewerStore((state) => state.activeSceneId)
+  const sceneSeleccionada = useViewerStore((state) => state.sceneSeleccionada)
+  const setScenes = useViewerStore((state) => state.setScenes)
+  const seleccionarEscena = useViewerStore((state) => state.seleccionarEscena)
+  const volverAlMenu = useViewerStore((state) => state.volverAlMenu)
+  const sincronizarEscenaActiva = useViewerStore((state) => state.sincronizarEscenaActiva)
+
+  useEffect(() => {
+    setScenes(INITIAL_SCENES)
+    sincronizarEscenaActiva()
+  }, [setScenes, sincronizarEscenaActiva])
 
   const activeScene = useMemo(
     () => scenes.find((item) => item.id === activeSceneId) ?? scenes[0],
@@ -87,25 +86,10 @@ export default function App() {
 
     const cargarManifest = async () => {
       try {
-        const respuesta = await fetch('/hospital-manifest.json')
-        if (!respuesta.ok) return
-
-        const payload = await respuesta.json()
-        const areasManifest = Array.isArray(payload) ? payload : payload?.areas
-        if (cancelado || !esManifestValido(areasManifest)) return
-
-        const nextScenes = areasManifest.map((area) => ({
-          id: area.id,
-          nombre: area.nombre,
-          descripcion: area.descripcion ?? 'Escena 360 del área.',
-          pano: area.pano,
-        }))
+        const nextScenes = await fetchScenesFromManifest()
+        if (cancelado) return
 
         setScenes(nextScenes)
-        setActiveSceneId((actual) => {
-          if (actual && nextScenes.some((scene) => scene.id === actual)) return actual
-          return actual ?? null
-        })
       } catch {
       }
     }
@@ -115,12 +99,11 @@ export default function App() {
     return () => {
       cancelado = true
     }
-  }, [])
+  }, [setScenes])
 
-  const seleccionarEscena = (sceneId) => {
-    setActiveSceneId(sceneId)
-    setSceneSeleccionada(true)
-  }
+  useEffect(() => {
+    sincronizarEscenaActiva()
+  }, [scenes, sincronizarEscenaActiva])
 
   if (!sceneSeleccionada) {
     return (
@@ -180,7 +163,7 @@ export default function App() {
         <button
           type="button"
           className="menu-back-btn"
-          onClick={() => setSceneSeleccionada(false)}
+          onClick={volverAlMenu}
         >
           Regresar al menú
         </button>

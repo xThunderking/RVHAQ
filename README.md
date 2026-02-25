@@ -37,6 +37,18 @@ La app ahora intenta cargar áreas desde [public/hospital-manifest.json](public/
 
 Esto permite migrar progresivamente a backend/CDN sin interrumpir el visor actual.
 
+## Arquitectura incremental (fase actual)
+
+- Estado del visor con `Zustand` (`src/store/viewerStore.js`).
+- Capa de datos separada (`src/services/scenesService.js`).
+- Fuente de datos configurable para S3/CDN usando variable de entorno:
+
+```bash
+VITE_SCENES_MANIFEST_URL=https://tu-cdn.com/hospital-manifest.json
+```
+
+Si no defines esa variable, usa `/hospital-manifest.json` local.
+
 ## Ejecutar
 
 ```bash
