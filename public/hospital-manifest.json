@@ -36,6 +36,15 @@
       "hotspots": [
         { "id": "pasillo", "nombre": "Ir a Pasillo", "yaw": -91.2, "pitch": -19.4, "radius": 8 }
       ]
+    },
+    {
+      "id": "osmo360",
+      "nombre": "Prueba Osmo 360",
+      "descripcion": "Imagen de prueba capturada con cámara Osmo 360 para validar calidad.",
+      "pano": "https://hospital360-panos.s3.amazonaws.com/osmo360/osmo360.JPG",
+      "previewUrl": "https://hospital360-panos.s3.amazonaws.com/osmo360/osmo360.JPG",
+      "marzipanoUrl": "https://hospital360-panos.s3.amazonaws.com/osmo360/app-files/index.html",
+      "hotspots": []
     }
   ]
 }

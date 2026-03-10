@@ -33,6 +33,14 @@ const INITIAL_SCENES = [
     previewUrl: 'https://hospital360-panos.s3.amazonaws.com/entrada/entrada.jpeg',
     marzipanoUrl: 'https://hospital360-panos.s3.amazonaws.com/entrada/app-files/index.html',
   },
+  {
+    id: 'osmo360',
+    nombre: 'Prueba Osmo 360',
+    descripcion: 'Imagen de prueba capturada con cámara Osmo 360 para validar calidad.',
+    pano: 'https://hospital360-panos.s3.amazonaws.com/osmo360/osmo360.JPG',
+    previewUrl: 'https://hospital360-panos.s3.amazonaws.com/osmo360/osmo360.JPG',
+    marzipanoUrl: 'https://hospital360-panos.s3.amazonaws.com/osmo360/app-files/index.html',
+  },
 ]
 
 function Scene360({ scene }) {
